@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: iot-manage
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+        server-addr: 192.168.67.107:8848
+        namespace: c9fb11ca-6545-4460-a32d-9b5c3836e462
+        group: DEFAULT_GROUP
+        shared-configs: service-common.yaml
+        refresh-enabled: true

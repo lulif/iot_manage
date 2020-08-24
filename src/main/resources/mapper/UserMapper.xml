@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cw.iot.modules.app.dao.UserDao">
+
+    <select id="listUsers" resultType="com.cw.iot.modules.app.entity.TUser">
+        select t1.id,t1.user_name,t1.row_state,t1.row_create_time,t1.row_creater,
+        t1.row_modifier,t1.row_modifier_time,t1.remark,t2.role_name as role
+        from T_USER as t1 inner join T_ROLE as t2 on t1.role=t2.id
+        where t1.row_state>=0 order by t1.row_modifier desc;
+    </select>
+    <select id="getUserById" resultType="com.cw.iot.modules.app.entity.TUser">
+        select t1.id,t1.user_name,t1.password,t1.row_state,t1.remark,t2.role_name as role
+        from T_USER as t1 inner join T_ROLE as t2 on t1.role=t2.id
+        where t1.id=#{id}
+    </select>
+
+</mapper>

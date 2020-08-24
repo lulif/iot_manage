@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cw.iot.modules.app.dao.DevicePointDao">
+
+    <select id="listDevicePoints" resultType="com.cw.iot.modules.app.entity.TDevicePoint">
+        select t1.id,t1.data_name,t1.data_unit,t1.identify_en,t2.model_name as deviceModel,
+        t1.row_creater,t1.row_create_time,t1.row_modifier,t1.row_modifier_time,t1.row_state
+        from T_DEVICE_POINT as t1 inner join T_DEVICE_MODEL as t2 on t1.device_model=t2.id
+        where t1.row_state>=0
+        <if test="params.state!=null">
+            and t1.row_state =#{params.state}
+        </if>
+        <if test="params.deviceModel!=null">
+            and t2.id = #{params.deviceModel}
+        </if>
+        <if test="params.query!=null and params.query!=''">
+            and ( t1.data_name like concat('%',#{params.query},'%')
+            or t1.data_unit like concat('%',#{params.query},'%')
+            or t2.model_name like concat('%',#{params.query},'%') )
+        </if>
+        order by t1.row_modifier_time desc limit #{limit},#{length};
+    </select>
+    <select id="selectDevicePointsCount" resultType="java.lang.Integer">
+        select count(*)
+        from T_DEVICE_POINT as t1 inner join T_DEVICE_MODEL as t2 on t1.device_model=t2.id
+        where t1.row_state>=0
+        <if test="state!=null">
+            and t1.row_state =#{state}
+        </if>
+        <if test="deviceModel!=null">
+            and t2.id = #{deviceModel}
+        </if>
+        <if test="query!=null and query!=''">
+            and ( t1.data_name like concat('%',#{query},'%')
+            or t1.data_unit like concat('%',#{query},'%')
+            or t2.model_name like concat('%',#{query},'%') )
+        </if>
+    </select>
+    <select id="selectDevicePointById" resultType="com.cw.iot.modules.app.entity.TDevicePoint">
+        select t1.id,t1.data_name,t1.data_unit,t1.identify_en,t2.model_name as deviceModel,t1.row_state
+        from T_DEVICE_POINT as t1 inner join T_DEVICE_MODEL as t2 on t1.device_model=t2.id
+        where t1.id=#{id}
+    </select>
+</mapper>
